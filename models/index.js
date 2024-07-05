@@ -1,0 +1,31 @@
+const { Sequelize, DataTypes } = require('sequelize');
+const User = require('./user');
+const Organization = require('./organization');
+
+// Create a new sequelize instance
+const sequelize =  new Sequelize({
+    dialect: 'postgres',
+    host: process.env.DB_HOST,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+})
+
+// db object that holds db related properties
+const db = {};
+
+db.Sequelize = Sequelize;
+db.sequelize = sequelize
+
+// Load models
+db.User = User(sequelize, DataTypes);
+db.Category = Organization(sequelize, DataTypes);
+
+// Add models association/relationship
+// Object.keys(db).forEach(modelName => {
+//     if (db[modelName].associate) {
+//       db[modelName].associate(db);
+//     }
+// });
+
+module.exports = db;
