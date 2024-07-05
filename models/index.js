@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const User = require('./user');
-const Organisation = require('./organization');
+const User = require('./user.model');
+const Organisation = require('./organization.model');
 
 // Create a new sequelize instance
 const sequelize =  new Sequelize({
@@ -9,6 +9,7 @@ const sequelize =  new Sequelize({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    logging: false
 })
 
 // db object that holds db related properties

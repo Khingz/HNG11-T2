@@ -5,8 +5,9 @@ const User =  (sequelize, datatype) => {
         userId: {
             type: datatype.STRING,
             primaryKey: true,
-            default: () => uuidv4(),
+            defaultValue: () => uuidv4(),
             unique: true,
+            allowNull: false,
         },
         firstName: {
             type: datatype.STRING,
