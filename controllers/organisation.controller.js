@@ -1,3 +1,4 @@
+const CustomError = require("../middleware/error/customError");
 const db = require("../models");
 
 const getUserOrganisations = async (req, res, next) => {
@@ -22,7 +23,7 @@ const getUserOrganisations = async (req, res, next) => {
         });
         res.status(200).json({
             status: 'success',
-            message: 'Organisation fetch successfully',
+            message: 'Organisations fetch successfully',
             data: {
                 organisations: orgs
             }
@@ -32,6 +33,46 @@ const getUserOrganisations = async (req, res, next) => {
     }
 }
 
+const getSingleOrganisation = async (req, res, next) => {
+    try {
+        const { orgId } = req.params;
+        const userOrganisation = await db.Organisation.findOne({
+            where: { orgId },
+            include: [{
+              model: db.User,
+              as: 'users',
+              attributes: ['userId'],
+            }],
+        });
+
+        if (!userOrganisation) {
+            throw new CustomError('No organisation found for the given organisation Id', 404);
+        }
+        const plainOrg = userOrganisation.get({ plain: true });
+        plainOrg.users.map(org => {
+            if (req.userId === org.userId) {
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Organisation fetch successfully',
+                    data: {
+                        orgId: plainOrg.orgId,
+                        name: plainOrg.name,
+                        description: plainOrg.description,
+                    }
+                })
+            }
+        })
+        res.status(403).json({
+            status: 'Bad reuest',
+            message: 'You are not authorized to get this organisation',
+            statusCode: 403
+        });
+    } catch(err) {
+        next(err);
+    }
+}
+
 module.exports = {
-    getUserOrganisations
+    getUserOrganisations,
+    getSingleOrganisation
 }

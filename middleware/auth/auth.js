@@ -1,5 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const CustomError = require('../error/customError');
 
 const verify_jwt = async (req, res, next) => {
     try {
