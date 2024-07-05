@@ -23,7 +23,7 @@ const login = async (req, res, next) => {
         if (!matchPassword) {
             throw new CustomError('Athentication failed', 401);
         }
-        const accessToken = jwt.sign({id: user.userId}, process.env.JWT_ACCESS_SECRET, {expiresIn: '10m'});
+        const accessToken = jwt.sign({id: user.userId}, process.env.JWT_ACCESS_SECRET, {expiresIn: '5d'});
         res.status(201).json({
             status: 'success',
             message: 'Login successful',
@@ -77,7 +77,7 @@ const register = async (req, res, next) => {
                 orgId: newOrg.orgId
             })
             if (addUserToOrg) {
-                const accessToken = jwt.sign({id: newUser.UserId}, process.env.JWT_ACCESS_SECRET, {expiresIn: '10m'});
+                const accessToken = jwt.sign({id: newUser.UserId}, process.env.JWT_ACCESS_SECRET, {expiresIn: '5d'});
                 return res.status(201).json({
                     status: 'success',
                     message: 'Registration successful',

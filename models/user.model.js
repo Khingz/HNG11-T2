@@ -71,7 +71,7 @@ const User =  (sequelize, datatype) => {
           through: 'UserOrganisations',
           foreignKey: 'userId',
           otherKey: 'orgId',
-          as: 'organizations',
+          as: 'organisations',
         });
     };
 
