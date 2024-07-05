@@ -3,7 +3,8 @@ const express = require('express');
 const { sequelize } = require('./models');
 const authRoute = require('./routes/auth.route');
 const userRoute = require('./routes/user.route')
-const organisationRoute = require('./routes/organisation.route')
+const organisationRoute = require('./routes/organisation.route');
+const errorHandler = require('./middleware/error/errorHandler');
 
 const PORT = process.env.PORT || 5000;
 
@@ -17,6 +18,11 @@ app.use(express.json());  //parse json bodies
 app.use('/api/users', userRoute);
 app.use('/api/organisations', organisationRoute);
 app.use ('/auth', authRoute);
+
+
+
+// Error handler middleware
+app.use(errorHandler);
 
 const connect = async () => {
     try {

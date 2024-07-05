@@ -5,15 +5,19 @@ const Organisation =  (sequelize, datatype) => {
         orgId: {
             type: datatype.STRING,
             primaryKey: true,
-            default: () => uuidv4(),
+            defaultValue: () => uuidv4(),
             unique: true,
+            allowNull: false
         },
         name: {
             type: datatype.STRING,
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: 'Name is required',
+                    msg: 'Organization name is required',
+                },
+                notEmpty: {
+                    msg: 'Organization name should not be empty',
                 },
             }
         },

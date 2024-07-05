@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const User = require('./user.model');
 const Organisation = require('./organization.model');
+const UserOrganisations = require('./userorganisations.model');
 
 // Create a new sequelize instance
 const sequelize =  new Sequelize({
@@ -21,6 +22,7 @@ db.sequelize = sequelize
 // Load models
 db.User = User(sequelize, DataTypes);
 db.Organisation = Organisation(sequelize, DataTypes);
+db.UserOrganisations = UserOrganisations(sequelize, DataTypes);
 
 // Add model's association/relationship
 Object.keys(db).forEach(modelName => {

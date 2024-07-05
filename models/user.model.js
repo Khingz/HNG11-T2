@@ -16,6 +16,9 @@ const User =  (sequelize, datatype) => {
                 notNull: {
                     msg: 'Firstname is required',
                 },
+                notEmpty: {
+                    msg: 'Firstname should not be empty',
+                },
             }
         },
         lastName: {
@@ -24,6 +27,9 @@ const User =  (sequelize, datatype) => {
             validate: {
                 notNull: {
                     msg: 'Lastname is required',
+                },
+                notEmpty: {
+                    msg: 'Lastname should not be empty',
                 },
             }
         },
@@ -37,6 +43,9 @@ const User =  (sequelize, datatype) => {
                 notNull: {
                     msg: 'Email is required',
                 },
+                notEmpty: {
+                    msg: 'Email should not be empty',
+                },
             }
         },
         password: {
@@ -45,6 +54,9 @@ const User =  (sequelize, datatype) => {
             validate: {
                 notNull: {
                     msg: 'Password is required',
+                },
+                notEmpty: {
+                    msg: 'Password should not be empty',
                 },
             }
         },

@@ -1,12 +1,20 @@
-const CustomError = require('./customError');
+const CustomError = require("./customError");
 
 const errorHandler = (err, req, res, next) => {
     console.error(err.stack);
     if (err instanceof CustomError) {
-        res.status(err.statusCode).json({ error: err.message });
+        return res.status(err.statusCode).json({error: [{
+            status: 'Bad reuest',
+            message: err.message,
+            statusCode: err.statusCode
+        }]});
     } else {
         console.log(err)
-        res.status(err.statusCode || 500).json({ error: err.message || 'Internal Server Error' });
+        return res.status(err.statusCode).json({error: [{
+            status: 'Server Error',
+            message: err.message || 'Internal Server Error',
+            statusCode: err.statusCode
+        }]});
     }
 }
 
