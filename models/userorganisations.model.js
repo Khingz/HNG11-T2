@@ -4,19 +4,19 @@ const UserOrganisations =  (sequelize, datatype) => {
     const userOrganisationsModel = sequelize.define('UserOrganisations', {
         userId: {
             type: datatype.STRING,
-            allowNull: false,
             references: {
               model: 'Users',
               key: 'userId',
             },
+            allowNull: false,
           },
           orgId: {
             type: datatype.STRING,
-            allowNull: false,
             references: {
-              model: 'Organizations',
+              model: 'Organisations',
               key: 'orgId',
             },
+            allowNull: false,
           },
     });
 

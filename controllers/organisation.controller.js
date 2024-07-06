@@ -72,7 +72,36 @@ const getSingleOrganisation = async (req, res, next) => {
     }
 }
 
+const createOrganisation = async (req, res, next) => {
+    try {
+        let {name, description} = req.body;
+        const newOrg = await db.Organisation.create({name, description});
+        if (newOrg) {
+            const addUserToOrg = await db.UserOrganisations.create({
+                userId: req.userId,
+                orgId: newOrg.orgId
+            });
+            if (addUserToOrg) {
+                return res.status(201).json({
+                    status: 'success',
+                    message: 'Organisation created successfully',
+                    data: {
+                        orgId: newOrg.orgId,
+                        name: newOrg.name,
+                        description: newOrg.description,
+                    }
+                })
+            }
+        }
+        throw new CustomError('Client error', 400)
+    } catch (err) {
+        console.log(err);
+        next(new CustomError('Client error', 400));
+    }
+}
+
 module.exports = {
     getUserOrganisations,
-    getSingleOrganisation
+    getSingleOrganisation,
+    createOrganisation
 }
