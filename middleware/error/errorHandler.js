@@ -1,5 +1,6 @@
 const CustomError = require("./customError");
 
+// Error handler middleware
 const errorHandler = (err, req, res, next) => {
     console.error(err.stack);
     if (err instanceof CustomError) {

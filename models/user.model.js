@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 
+// Defines user model
 const User =  (sequelize, datatype) => {
     const userModel = sequelize.define('User', {
         userId: {

@@ -2,6 +2,20 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const CustomError = require('../error/customError');
 
+
+// Helper function to promisify jwt.verify callback method
+function verifyToken(accessToken, secret) {
+    return new Promise((resolve, reject) => {
+        jwt.verify(accessToken, secret, (err, decoded) => {
+            if (err) {
+                return reject(new CustomError('Access Denied! Invalid token', 403));
+            }
+            resolve(decoded);
+        });
+    });
+}
+
+// Hanldes verifying jwt passed via request header
 const verify_jwt = async (req, res, next) => {
     try {
         if (!req.headers.authorization) {
@@ -12,14 +26,9 @@ const verify_jwt = async (req, res, next) => {
             throw new CustomError('Acess Denied!, No access token', 403);
         }
         // To do: Check id access token is blocked -> Logged out user token
-        jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
-            if (err) {
-                throw new CustomError('Acess Denied!, Invalid token', 403);
-            }
-    
-            req.userId = decoded.id;
-            next();
-          });
+        const decoded = await verifyToken(accessToken, process.env.JWT_ACCESS_SECRET);
+        req.userId = decoded.id;
+        next();
     } catch (err) {
         next(err);
     }

@@ -35,3 +35,5 @@ const connect = async () => {
 }
 
 connect();
+
+module.exports = app;

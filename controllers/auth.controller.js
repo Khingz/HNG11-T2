@@ -5,6 +5,7 @@ const CustomError = require('../middleware/error/customError');
 const jwt = require('jsonwebtoken');
 
 
+// Login Controller for Login route
 const login = async (req, res, next) => {
     try {
         const {email, password} = req.body;
@@ -39,10 +40,12 @@ const login = async (req, res, next) => {
             }
         })
     } catch (err) {
+        console.log(err);
         next(err);
     }
 }
 
+// Register controller for register route
 const register = async (req, res, next) => {
     try {
         let {firstName, password, lastName, email, phone} = req.body;
@@ -63,21 +66,25 @@ const register = async (req, res, next) => {
             phone,
             password: hashedPassword
         }
+        // Add a new user to the db
         const newUser = await db.User.create(newUserObj);
         if (newUser) {
             const newOrgObj = {
                 name: `${newUser.firstName}'s Organisation`
             }
+            // Create a default organisation for the new user
             const newOrg = await db.Organisation.create(newOrgObj);
             if (!newOrg) {
                 throw new CustomError('Error creating user organisation', 400);
             }
+            // Add the new user to the newly created organisation
             const addUserToOrg = await db.UserOrganisations.create({
                 userId: newUser.userId,
                 orgId: newOrg.orgId
             })
             if (addUserToOrg) {
-                const accessToken = jwt.sign({id: newUser.UserId}, process.env.JWT_ACCESS_SECRET, {expiresIn: '5d'});
+                // Generate access token for auto login after user registration
+                const accessToken = jwt.sign({id: newUser.userId}, process.env.JWT_ACCESS_SECRET, {expiresIn: '5d'});
                 return res.status(201).json({
                     status: 'success',
                     message: 'Registration successful',
@@ -94,6 +101,7 @@ const register = async (req, res, next) => {
                 })
             }
         }
+        // Something bad happen in the entire process
         res.status(400).json({
             status: 'Bad request',
             message: 'Registration unsuccessful',

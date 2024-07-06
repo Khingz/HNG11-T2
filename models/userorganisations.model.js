@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 
+// Intermer=diate model for user-orgnaisation to facilitate MtoM relationship
 const UserOrganisations =  (sequelize, datatype) => {
     const userOrganisationsModel = sequelize.define('UserOrganisations', {
         userId: {

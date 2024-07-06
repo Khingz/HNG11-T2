@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 
+// Defines Organisation model
 const Organisation =  (sequelize, datatype) => {
     const organisationModel = sequelize.define('Organisation', {
         orgId: {
