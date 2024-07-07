@@ -36,6 +36,7 @@ const startServer = async () => {
       console.error('Unable to connect with database', error);
     }
 }
+
 module.exports = {
   app,
   startServer
