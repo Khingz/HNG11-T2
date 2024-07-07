@@ -5,18 +5,19 @@ const authRoute = require('./routes/auth.route');
 const userRoute = require('./routes/user.route')
 const organisationRoute = require('./routes/organisation.route');
 const errorHandler = require('./middleware/error/errorHandler');
-
-const PORT = process.env.PORT || 5000;
+const cors = require('cors');
 
 
 const app = express();
 
+app.use(cors());
+app.use(express.urlencoded({extended: false})); 
 app.use(express.json());  //parse json bodies
 
 
 // routes
 app.get('/', (req, res) => {
-  return res.status(200).json({user: '1'})
+  return res.status(200).json({message: 'Hello world'})
 })
 app.use('/api/users', userRoute);
 app.use('/api/organisations', organisationRoute);
