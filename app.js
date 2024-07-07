@@ -1,0 +1,41 @@
+require('dotenv').config();
+const express = require('express');
+const { sequelize } = require('./models');
+const authRoute = require('./routes/auth.route');
+const userRoute = require('./routes/user.route')
+const organisationRoute = require('./routes/organisation.route');
+const errorHandler = require('./middleware/error/errorHandler');
+
+const PORT = process.env.PORT || 5000;
+
+
+const app = express();
+
+app.use(express.json());  //parse json bodies
+
+
+// routes
+app.get('/', (req, res) => {
+  return res.status(200).json({user: '1'})
+})
+app.use('/api/users', userRoute);
+app.use('/api/organisations', organisationRoute);
+app.use ('/auth', authRoute);
+
+
+
+// Error handler middleware
+app.use(errorHandler);
+
+const startServer = async () => {
+    try {
+      await sequelize.sync();
+      console.log('Connected to database');
+    } catch (error) {
+      console.error('Unable to connect with database', error);
+    }
+}
+module.exports = {
+  app,
+  startServer
+}

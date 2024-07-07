@@ -35,5 +35,6 @@ const verify_jwt = async (req, res, next) => {
 }
 
 module.exports = {
-    verify_jwt
+    verify_jwt,
+    verifyToken
 }

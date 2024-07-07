@@ -10,7 +10,11 @@ const login = async (req, res, next) => {
     try {
         const {email, password} = req.body;
         if (!email || !password) {
-            throw new CustomError('Athentication failed', 401);
+            res.status(401).json({
+                "status": "Bad request",
+                "message": "Authentication failed",
+                "statusCode": 401
+            })
         }
         const user = await db.User.findOne({
             where: {
@@ -18,13 +22,21 @@ const login = async (req, res, next) => {
             },
         });
         if (!user) {
-            throw new CustomError('Athentication failed', 401);
+            res.status(401).json({
+                "status": "Bad request",
+                "message": "Authentication failed",
+                "statusCode": 401
+            })
         }
         const matchPassword = await bcrypt.compare(password, user.password);
         if (!matchPassword) {
-            throw new CustomError('Athentication failed', 401);
+            res.status(401).json({
+                "status": "Bad request",
+                "message": "Authentication failed",
+                "statusCode": 401
+            })
         }
-        const accessToken = jwt.sign({id: user.userId}, process.env.JWT_ACCESS_SECRET, {expiresIn: '5d'});
+        const accessToken = await jwt.sign({id: user.userId}, process.env.JWT_ACCESS_SECRET, {expiresIn: '5d'});
         res.status(201).json({
             status: 'success',
             message: 'Login successful',
@@ -49,9 +61,19 @@ const login = async (req, res, next) => {
 const register = async (req, res, next) => {
     try {
         let {firstName, password, lastName, email, phone} = req.body;
+        // Create a user instance with the input data
+        const newUserData = db.User.build({
+            firstName,
+            lastName,
+            email,
+            phone,
+            password
+        });
+        // Validate the user instance
+        await newUserData.validate();
         const userExist = await db.User.findOne({
             where: {
-              email: email
+            email: email
             },
         });
         if (userExist) {
@@ -59,15 +81,9 @@ const register = async (req, res, next) => {
         }
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const newUserObj = {
-            firstName,
-            lastName,
-            email,
-            phone,
-            password: hashedPassword
-        }
-        // Add a new user to the db
-        const newUser = await db.User.create(newUserObj);
+        newUserData.password = hashedPassword;
+        // Save the new user to the database
+        const newUser = await newUserData.save();
         if (newUser) {
             const newOrgObj = {
                 name: `${newUser.firstName}'s Organisation`
