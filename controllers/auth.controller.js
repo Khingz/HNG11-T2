@@ -10,7 +10,7 @@ const login = async (req, res, next) => {
     try {
         const {email, password} = req.body;
         if (!email || !password) {
-            res.status(401).json({
+            return res.status(401).json({
                 "status": "Bad request",
                 "message": "Authentication failed",
                 "statusCode": 401
@@ -22,7 +22,7 @@ const login = async (req, res, next) => {
             },
         });
         if (!user) {
-            res.status(401).json({
+            return res.status(401).json({
                 "status": "Bad request",
                 "message": "Authentication failed",
                 "statusCode": 401
@@ -30,7 +30,7 @@ const login = async (req, res, next) => {
         }
         const matchPassword = await bcrypt.compare(password, user.password);
         if (!matchPassword) {
-            res.status(401).json({
+            return res.status(401).json({
                 "status": "Bad request",
                 "message": "Authentication failed",
                 "statusCode": 401

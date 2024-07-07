@@ -19,17 +19,17 @@ const sequelize = new Sequelize(process.env.DB_URL, {
   dialectOptions: {
     ssl: {
       require: true,
-      rejectUnauthorized: false, 
-      ca: process.env.CA_CERT
+      rejectUnauthorized: false,
     }
-  }
+  },
+  logging: false
 });
 
 // db object that holds db related properties
 const db = {};
 
 db.Sequelize = Sequelize;
-db.sequelize = sequelize
+db.sequelize = sequelize;
 
 // Load models
 db.User = User(sequelize, DataTypes);
