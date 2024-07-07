@@ -14,7 +14,7 @@ const keepAwake = async () => {
 };
 
 // Set interval to ping the server every 25 minutes
-setInterval(keepAwake, 25 * 60 * 1000);
+setInterval(keepAwake, 10 * 60 * 1000);
 
 // Initial call to start the process immediately
 keepAwake();
