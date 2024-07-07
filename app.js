@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());  //parse json bodies
 
 // keeps render hosting alive 
-require('./keepAwake')
+require('./keepAlive')
 
 // routes
 app.get('/', (req, res) => {
