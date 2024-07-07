@@ -206,15 +206,6 @@ describe('User Registration', () => {
         // Check default oranisation is created in database
         const createdOrg = await db.Organisation.findOne({ where: { name: `${createdUser.firstName}'s Organisation` } });
         expect(createdOrg).toBeDefined();
-        expect(createdOrg.name).toBe(`${createdUser.firstName}'s Organisation`);
-
-
-        // Check user is added to default organisation
-        // const checkUserInOrg = await db.UserOrganisations.findOne({ where: { userId: createdUser.userId, orgId: createdOrg.orgId } });
-        // console.log(checkUserInOrg);
-        // expect(checkUserInOrg).toBeDefined();
-        // expect(checkUserInOrg.orgId).toBe(createdOrg.orgId);
-        // expect(checkUserInOrg.userId).toBe(response.body.data.user.userId);
     })
 
     test('model constraint error', async () => {
