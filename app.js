@@ -22,6 +22,10 @@ app.get('/health', (req, res) => {
   return res.status(200).send('OK');
 })
 
+app.get('/', (req, res) => {
+  return res.status(200).send('OK');
+})
+
 app.use('/api/users', userRoute);
 app.use('/api/organisations', organisationRoute);
 app.use ('/auth', authRoute);
