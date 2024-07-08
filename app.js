@@ -18,8 +18,8 @@ app.use(express.json());  //parse json bodies
 require('./keepAlive')
 
 // routes
-app.get('/', (req, res) => {
-  return res.status(200).json({message: 'Hello world'})
+app.get('/health', (req, res) => {
+  return res.status(200).send('OK');
 })
 app.use('/api/users', userRoute);
 app.use('/api/organisations', organisationRoute);
