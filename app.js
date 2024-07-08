@@ -21,11 +21,18 @@ require('./keepAlive')
 app.get('/health', (req, res) => {
   return res.status(200).send('OK');
 })
+
 app.use('/api/users', userRoute);
 app.use('/api/organisations', organisationRoute);
 app.use ('/auth', authRoute);
 
-
+// Page not found route
+app.use((req, res, next) => {
+  res.status(404).json({
+    status: 'Bad request',
+    message: 'Route not found'
+  })
+})
 
 // Error handler middleware
 app.use(errorHandler);
