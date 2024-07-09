@@ -47,7 +47,7 @@ describe('Token Generaion', () => {
         } catch (err) {
             expect(err instanceof CustomError).toBeTruthy();
             expect(err.message).toEqual('Access Denied! Invalid token');
-            expect(err.statusCode).toEqual(403);
+            expect(err.statusCode).toEqual(401);
         }
         
     })

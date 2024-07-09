@@ -31,9 +31,6 @@ const getUser = async (req, res, next) => {
                 }
             })
         }
-        if (!loggedInUser.organisations) {
-            throw new CustomError('You cannot access this user', 403);
-        }
         // Find the user and their organisation
         const targetUser = await db.User.findByPk(targetUserId, {
             include: {
@@ -54,8 +51,9 @@ const getUser = async (req, res, next) => {
         const commonOrg = loggedInUser.organisations.filter(org1 =>
             targetUser.organisations.some(org2 => org1.id === org2.id)
         );
+        console.log(commonOrg.length);
         // Throw error is no organisation is found in common
-        if (commonOrg.length > 0) {
+        if (commonOrg.length <= 0) {
             throw new CustomError('You cannot access this user', 403);
         }
         res.status(200).json({

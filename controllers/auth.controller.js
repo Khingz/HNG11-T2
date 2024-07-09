@@ -77,7 +77,11 @@ const register = async (req, res, next) => {
             },
         });
         if (userExist) {
-            throw new CustomError('Email already in use', 409);
+            return res.status(400).json({
+                status: 'Bad request',
+                message: 'Registration unsuccesful',
+                statusCode: 400
+            })
         }
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);

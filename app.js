@@ -14,9 +14,6 @@ app.use(cors());
 app.use(express.urlencoded({extended: false})); 
 app.use(express.json());  //parse json bodies
 
-// keeps render hosting alive 
-require('./keepAlive')
-
 // routes
 app.get('/health', (req, res) => {
   return res.status(200).send('OK');

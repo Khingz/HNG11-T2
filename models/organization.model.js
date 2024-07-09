@@ -15,10 +15,10 @@ const Organisation =  (sequelize, datatype) => {
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: 'Organization name is required',
+                    msg: 'Organisation name is required',
                 },
                 notEmpty: {
-                    msg: 'Organization name should not be empty',
+                    msg: 'Organisation name should not be empty',
                 },
             }
         },

@@ -105,10 +105,18 @@ const createOrganisation = async (req, res, next) => {
                 })
             }
         }
-        throw new CustomError('Client error', 400)
+        res.status(401).json({
+            status: 'Bad request',
+            message: 'Client error',
+            statusCode: 400
+        })
     } catch (err) {
-        console.log(err);
-        next(new CustomError('Client error', 400));
+        console.log(err.message);
+        res.status(400).json({
+            status: 'Bad request',
+            message: 'Client error',
+            statusCode: 400
+        })
     }
 }
 
@@ -117,21 +125,43 @@ const createOrganisation = async (req, res, next) => {
 const addUser = async (req, res, next) => {
     try {
         const { orgId } = req.params;
+        const {userId} = req.body;
+        if (!orgId) {
+            return res.status(401).json({
+                status: 'Bad request',
+                message: 'No organosation id passed',
+                statusCode: 401
+            })
+        }
+
+        if (!userId || userId === '') {
+            return res.status(401).json({
+                status: 'Bad request',
+                message: 'UserId cannot be null or empty',
+                statusCode: 401
+            })
+        }
         const org = await db.Organisation.findOne({
             where: { orgId }
         });
         if (!org) {
             throw new CustomError('Client error', 400);
         }
+        const user = await db.User.findOne({
+            where: { userId }
+        });
+        if (!user) {
+            throw new CustomError('Client error', 400);
+        }
         const userOrg = await db.UserOrganisations.findOne({
-            where: { orgId, userId: req.userId }
+            where: { orgId, userId }
         });
         if (userOrg) {
             throw new CustomError('Client error, user aleady belongs to this organisation', 400);
         }
         const addUserToOrg = await db.UserOrganisations.create({
-            userId: req.userId,
-            orgId: org.orgId
+            userId: userId,
+            orgId: orgId
         });
         if(!addUserToOrg) {
             throw new CustomError('Server error', 500);
